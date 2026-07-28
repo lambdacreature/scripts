@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+if [[ $# -gt 2 ]]; then
+  echo 'error: too many arguments'
+  echo "synopsis: $0 PATH [PORT]"
+  exit 1
+fi
+
+if ! type rclone >/dev/null 2>/dev/null; then
+  echo 'error: rclone missing from the system, install it first'
+  exit 1
+fi
+
+if ! [[ -n $1 ]]; then
+  echo 'error: missing directory path'
+  echo "synopsis: $0 PATH [PORT]"
+  exit 1
+fi
+
+if ! [[ -d $1 ]]; then
+  echo "error: \"$1\" does not exists or it is not a directory"
+  exit 1
+fi
+path="$1"
+
+port=8080
+if [[ -n $2 ]]; then
+  if echo "$2" | grep -E '[1-9][0-9]*' - >/dev/null; then
+    if [[ $2 -ge 1 ]] && [[ $2 -le 9000 ]]; then
+      if [[ $2 -le 1000 ]] && [[ $USER != root ]]; then
+        echo 'error: you need root privileges to bind to ports 1 through 1000'
+        exit 1
+      fi
+      port=$2
+    else
+      echo 'error: invalid port number'
+      exit 1
+    fi
+  else
+    echo 'error: invalid port number'
+    exit 1
+  fi
+fi
+
+
+addr_regex='(([1-9][0-9]*)|0)\.(([1-9][0-9]*)|0)\.(([1-9][0-9]*)|0)\.(([1-9][0-9]*)|0)'
+if type ifconfig >/dev/null 2>/dev/null; then
+  echo
+  echo
+  for addr in $(ifconfig | grep -o -E "inet $addr_regex" - | grep -o -E "$addr_regex" -); do
+    echo "  http://$addr:$port/"
+  done
+  echo
+  echo
+elif type ip > /dev/null 2>/dev/null; then
+  echo
+  echo
+  for addr in $(ip a | grep -o -E "inet $addr_regex" - | grep -o -E "$addr_regex" -); do
+    echo "  http://$addr:$port/"
+  done
+  echo
+  echo
+fi
+
+rclone serve webdav "$path" --addr ":$port"
