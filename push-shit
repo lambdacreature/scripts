@@ -10,7 +10,8 @@ then
     handle_error
 fi
 
-git commit -m 'pushing some stuff Owo'
+msg={1:-'pushing some stuff Owo'}
+git commit -m "$msg"
 if [[ "$?" != 0 ]]
 then 
     handle_error
