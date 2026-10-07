@@ -1,0 +1,24 @@
+#!/bin/env bash
+handle_error() {
+    echo 'shit happens TwT'
+    exit 1
+}
+
+git add .
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
+
+git commit -m 'pushing some stuff Owo'
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
+
+git push origin main
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
+
