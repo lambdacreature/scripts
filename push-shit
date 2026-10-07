@@ -22,4 +22,3 @@ if [[ "$?" != 0 ]]
 then 
     handle_error
 fi
-
