@@ -1,0 +1,33 @@
+#!/bin/env bash
+
+#####################################################
+##                                                 ##
+##             fpush -> fast push                  ##
+##                                                 ##
+## commit & push to main with a single command Uwu ##
+##                                                 ## 
+#####################################################
+
+handle_error() {
+    echo 'shit happens TwT'
+    exit 1
+}
+
+git add .
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
+
+msg="${1:-'pushing some stuff Owo'}"
+git commit -m "$msg"
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
+
+git push origin main
+if [[ "$?" != 0 ]]
+then 
+    handle_error
+fi
