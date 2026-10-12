@@ -1,2 +1,20 @@
 #!/usr/bin/env bash 
-date +"%A, %B %d, day %j of big %Y"
+
+display_date_motd() {
+    # to account for leap years
+    year=$(date +"%Y")
+    total_days=$(date -d "$year-12-31" +"%j")
+
+    # date indexes days from 1 so this is a correct
+    # way to count and above's too
+    days_passed=$(date +"%j")
+
+    # bash does not handle floats
+    # (( days_passed * 100 / total_days )) would truncate
+    # and I need the result rounded to two decimal places
+    percent=$(awk "BEGIN {printf \"%.2f\", $(( days_passed * 100 )) / $total_days}")
+
+    date +"%A, %B %d, $percent%% of big %Y"
+}
+
+display_date_motd
