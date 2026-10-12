@@ -14,7 +14,7 @@ display_date_motd() {
     # and I need the result rounded to two decimal places
     percent=$(awk "BEGIN {printf \"%.2f\", $(( days_passed * 100 )) / $total_days}")
 
-    date +"%A, %B %d, $percent%% of big %Y"
+    date +"%A, %B %d, the $percent%% of %Y is gone"
 }
 
 display_date_motd
