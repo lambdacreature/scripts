@@ -7,7 +7,7 @@ display_date_motd() {
 
     # date indexes days from 1 so this is a correct
     # way to count and above's too
-    days_passed=$(date +"%j")
+    days_passed=$(( $(date +"%j") - 1))
 
     # bash does not handle floats
     # (( days_passed * 100 / total_days )) would truncate
